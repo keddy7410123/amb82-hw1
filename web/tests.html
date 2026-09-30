@@ -1,0 +1,15 @@
+<!doctype html><meta charset="utf-8"><title>Protocol tests</title><pre id="result">Running…</pre><script type="module">
+import {parseSpeech, parseReply} from './protocol.js';
+let count = 0;
+function equal(actual, expected) { count++; if (actual !== expected) throw new Error(`Test ${count}: ${actual} !== ${expected}`); }
+try {
+  for (const [text, command] of [['左邊閃爍三次','BLUE_BLINK3'], ['藍燈閃爍3次','BLUE_BLINK3'], ['右邊閃爍三次','GREEN_BLINK3'], ['绿灯闪烁3次','GREEN_BLINK3'], ['閃爍三次','BOTH_BLINK3'], ['全部閃爍三次','BOTH_BLINK3']]) equal(parseSpeech(text),command);
+  for (const text of ['不要閃爍三次', '左邊閃爍四次', '閃爍33次', '左邊閃爍三次右邊開燈']) equal(parseSpeech(text),null);
+  for (const [text, command] of [['左邊開燈','BLUE_ON'],['右邊開燈','GREEN_ON'],['左邊關燈','BLUE_OFF'],['右邊關燈','GREEN_OFF'],[' 左边开灯。 ','BLUE_ON'],['開藍燈','BLUE_ON'],['關綠燈','GREEN_OFF']]) equal(parseSpeech(text),command);
+  for (const text of ['', '不要左邊開燈', '左邊開燈嗎', '左邊開燈右邊關燈', '今天的天氣', '開燈', '請不要開藍燈', '左邊', '左邊開燈或右邊開燈']) equal(parseSpeech(text), null);
+  const good = {protocol:1,board:'AMB82-MINI',id:12,ok:true,blue:true,green:false};
+  equal(parseReply(JSON.stringify(good)).blue, true);
+  for (const bad of ['boot log', '{}', JSON.stringify({...good,id:0}), JSON.stringify({...good,board:'OTHER'}), JSON.stringify({...good,blue:'true'}), JSON.stringify({...good,protocol:2})]) equal(parseReply(bad),null);
+  document.getElementById('result').textContent = `PASS: ${count} protocol assertions`;
+} catch (e) { document.getElementById('result').textContent = `FAIL: ${e.message}`; throw e; }
+</script>

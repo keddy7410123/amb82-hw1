@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-Hant">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ameba · 語音燈控</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <main>
+    <header><a class="brand" href="./">◈ AMEBA LAB</a><span class="badge">AMB82-MINI · USB</span></header>
+    <section class="intro">
+      <p class="eyebrow">VOICE CONTROL / 01</p>
+      <h1>說一句話，<br>讓光回應你。</h1>
+      <p>用你的聲音，控制左側藍燈與右側綠燈。</p>
+    </section>
+    <section class="connection">
+      <div><strong id="connection">尚未連接開發板</strong>
+        <p id="device">USB 連接後，選擇開發板的序列埠。</p>
+      </div><button id="connect">連接開發板 ↗</button><button id="disconnect" hidden>中斷連線</button>
+    </section>
+    <div class="layout">
+      <section class="voice panel">
+        <p class="eyebrow">01 / 語音指令</p>
+        <h2>今天，想點亮哪一邊？</h2>
+        <p>點擊麥克風，再說「左邊開燈」或「右邊開燈」。</p><button id="listen" class="mic" disabled aria-label="開始語音辨識">◎</button><strong
+          id="speechStatus">連接後即可開始說話</strong>
+        <div class="transcript"><span>辨識結果</span>
+          <p id="transcript">等待你的聲音…</p>
+        </div>
+        <p class="hint">也支援左右關燈、左右閃爍三次；說「閃爍三次」則兩燈一起閃爍。每次只說一個指令。</p>
+      </section>
+      <section class="panel">
+        <p class="eyebrow">02 / 開發板回報</p>
+        <div class="lights">
+          <article>
+            <div id="blueOrb" class="orb blue"></div>
+            <h2>左側 · 藍燈</h2><strong id="blueState">未知</strong>
+            <p>D23 / PF9</p>
+          </article>
+          <article>
+            <div id="greenOrb" class="orb green"></div>
+            <h2>右側 · 綠燈</h2><strong id="greenState">未知</strong>
+            <p>D24 / PE6</p>
+          </article>
+        </div>
+        <p id="updated" class="hint">尚未收到開發板資訊</p><button id="refresh" class="secondary" disabled>重新讀取狀態</button>
+        <p class="hint">顯示板端 GPIO 讀值，不是光學感測；斷線或逾時即標示未知。</p>
+      </section>
+    </div>
+    <section class="panel feedback">
+      <p class="eyebrow">03 / 執行情形</p><label><input type="checkbox" id="voiceReply" checked> 語音回覆</label>
+      <p id="voiceReplyStatus" class="hint">由電腦喇叭播報；控制成功須等開發板確認後才回覆。</p>
+      <p id="feedback" role="status" aria-live="polite">請先連接開發板。</p>
+      <details>
+        <summary>文字測試與操作紀錄</summary>
+        <form id="textForm"><label for="text">輸入與語音相同的指令</label>
+          <div class="inputRow"><input id="text" placeholder="例如：左邊開燈" autocomplete="off"><button id="send"
+              disabled>傳送</button></div>
+        </form>
+        <ol id="log"></ol>
+      </details>
+    </section>
+    <footer>電腦版 Chrome · 麥克風 + Web Serial <span>語音辨識可能使用瀏覽器的雲端服務，需連線網際網路。</span></footer>
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+
+</html>
